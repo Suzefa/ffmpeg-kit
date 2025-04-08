@@ -162,10 +162,10 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
         }
         try {
             // Android v2 embedding (FlutterPluginBinding)
-            final MethodChannel channel = new MethodChannel(registrar.messenger(), "ffmpeg_kit");
+            methodChannel = new MethodChannel(registrar.messenger, METHOD_CHANNEL);
             FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();
             plugin.init(registrar.messenger(), context, registrar.activity(), registrar, null);
-            channel.setMethodCallHandler(plugin);
+            methodChannel.setMethodCallHandler(plugin);
         } catch (NoSuchMethodError e) {
             // Android v1 embedding (PluginRegistry.Registrar)
             FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();

@@ -160,8 +160,19 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
             Log.w(LIBRARY_NAME, "FFmpegKitFlutterPlugin can not be registered without a context.");
             return;
         }
-        FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();
-        plugin.init(registrar.messenger(), context, registrar.activity(), registrar, null);
+        try {
+            // Android v2 embedding (FlutterPluginBinding)
+            final MethodChannel channel = new MethodChannel(registrar.messenger(), "ffmpeg_kit");
+            FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();
+            plugin.init(registrar.messenger(), context, registrar.activity(), registrar, null);
+            channel.setMethodCallHandler(plugin);
+        } catch (NoSuchMethodError e) {
+            // Android v1 embedding (PluginRegistry.Registrar)
+            FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();
+            plugin.init(registrar.messenger(), context, registrar.activity(), registrar, null);
+        }        
+        // FFmpegKitFlutterPlugin plugin = new FFmpegKitFlutterPlugin();
+        // plugin.init(registrar.messenger(), context, registrar.activity(), registrar, null);
     }
 
     protected void registerGlobalCallbacks() {
